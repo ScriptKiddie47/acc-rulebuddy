@@ -4,7 +4,13 @@
 ### Run Locally
 
 1. Install Python Latest Version
-2. CHeck Installation using `python -V' Command
+2. Check Installation using Command
+
+    ```ps
+    $ python -V
+    Python 3.13.2
+    ```
+
 3. Fetch Groq Libs : `pip install groq`
 4. Reference : https://github.com/groq/groq-python
 5. Provide Key & Run Locally : 
