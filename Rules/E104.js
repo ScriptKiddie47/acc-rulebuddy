@@ -1,4 +1,5 @@
 function evaluateE104Rule(request) {
+     // request AddVehicles_Request1.json
     const data = request.data;
     const effectiveDt = new Date(data.effectiveDt);
     const ruleEffectiveDate = new Date("2025-07-14");
