@@ -1,4 +1,5 @@
 function evaluateRuleE102(requestJson) {
+  //request Json_AutoTemplate.json
   const data = requestJson.data;
   const hasHighPriorYrIssaCnt = data.coverageParts.some(
     part => part.priorYrIssaCnt > 300
