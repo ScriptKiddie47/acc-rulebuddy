@@ -28,7 +28,7 @@
       "covPartStates": [],
       "Vehicles": [],
 	  "autoCovPartStates": [],
-	  "coverageSymbolsGroups": [],
+	  "coverageSymbolsGroups": []
 		
 	  }
       ],
@@ -39,7 +39,7 @@
 	  "expirationDt": "2025-07-14",
 	  "transaction":{},
 	  "businessClassCdGvng": "P55",
-	  "policyID": 21567843,
+	  "policyID": 21567843
 	  
 }
 }
