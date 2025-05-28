@@ -7,7 +7,7 @@
   "programCdGvngLeg": "P55",
   "reportingOfficeCdLeg": "084",
   "policyNbr": "00A12675A",
-  "issuingBusinessUnitCdGvng": "14",
+  "issuingBusinessUnitCdGvng": "10",
   "brandCd": "BAP",
   "coverageParts": [
     {
@@ -20,7 +20,7 @@
       "industrySegmentTypeCdGvng": "18",
       "programCdGvng": "P55",
       "businessClassCdGvng": "P55",
-      "priorYrIssaCnt": 0.0,
+      "priorYrIssaCnt": 600,
       "covPartCd": "AU",
       "govratingStateCd": "PA",
       "coverages": [],
