@@ -19,7 +19,7 @@
         "industrySegmentTypeCdGvng": "18",
         "programCdGvng": "P55",
         "businessClassCdGvng": "P55",
-        "priorYrIssaCnt": 0,
+        "priorYrIssaCnt": 60000,
         "covPartCd": "AU",
         "govratingStateCd": "PA",
         "coverages": [],
