@@ -1,4 +1,4 @@
-{
+
   "data": {
     "uniqueID": "1",
     "drChgNwdSbUblHierarchyNbr": 0,
@@ -38,7 +38,7 @@
                 "bureauVehicleClassIdCd": "LTRK",
                 "vehicleGroupTypeCd": "TTT",
                 "makeCd": "FORD",
-                "vehicleIdentificationNbr": "1FTNE24L09DA25896",
+                "vehicleIdentificationNbr": "1FRK24L09DA25896",
                 "makeNm": "FORD",
                 "commercialVehicleBusinessUseCd": "S",
                 "commercialVehicleBusinessSubUseCd": "01",
@@ -70,7 +70,6 @@
     "formCd": "BA",
     "expirationDt": "2025-07-14",
     "transaction": {},
-    "businessClassCdGvng": "P55",
-    "policyID": 21567843
+    "businessClassCdGvng": "P55"
   }
 }
