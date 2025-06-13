@@ -1,3 +1,4 @@
+import uvicorn
 from pathlib import Path
 from dotenv import load_dotenv
 from langchain.prompts import ChatPromptTemplate
@@ -6,9 +7,19 @@ from langchain.schema.runnable import RunnableLambda
 from langchain_openai import ChatOpenAI
 from fastapi import FastAPI,Response
 from pydantic import BaseModel
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 @app.get("/health")
 def health():
     return "Up"
@@ -106,3 +117,7 @@ def user_request(uInput:UserInput):
     template_pair = {"rule_content":rule_content, "policy_content":policy_content, "ruleName":ruleName , "policyNumber" : policyNumber }
     rule_issue_resolver_chain.invoke(template_pair)
     return Response(content=responseMessage, media_type="text/plain")
+
+
+if __name__ == "__main__":
+    uvicorn.run("open-ai-langchain:app", port=5000, log_level="info")
