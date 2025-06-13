@@ -9,8 +9,12 @@ from fastapi import FastAPI,Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+# Load LLM
+load_dotenv()
+model = ChatOpenAI(model="gpt-4.1-nano")
 
+# Load FastAPI
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -24,13 +28,10 @@ app.add_middleware(
 def health():
     return "Up"
 
-
-load_dotenv()
-model = ChatOpenAI(model="gpt-4.1-nano")
-
 ruleName = ""
 policyNumber = ""
 responseMessage = ""
+errorResponseMessage = ""
 
 # Function to set ruleName
 def setRuleName(rN):
@@ -47,12 +48,18 @@ def setResponseMessage(rM):
     global responseMessage
     responseMessage = rM
 
+# Function to set Error Response Message
+def setErrorResponseMessage(erM):
+    global errorResponseMessage
+    errorResponseMessage = erM
+
 
 # Template to Capture Rule Name
 capture_ruleName_template = ChatPromptTemplate.from_messages(
     [
-        ("system","You are an helpfull assistant responsible for capturing ruleName, which looks like E343,E211,E.. "
-        "from the input prompt. Your response should only contain the rulename. It should be a one word answer"),
+        ("system","You are an helpfull assistant responsible for capturing Rule Names, which looks like E343,E211,E.. "
+        "from the input prompt. Your response should only contain the rulename. It should be a one word answer."
+        "If you are unable to capture the rule name you must respond with 'empty' "),
         ("human", "{user_query}"),
     ]
 )
@@ -101,6 +108,20 @@ rule_issue_resolver_template = ChatPromptTemplate.from_messages(
 captureResponseMessageRunnable = RunnableLambda(lambda x: print(f"Captured Response Message : {x}") or setResponseMessage(x))
 rule_issue_resolver_chain = rule_issue_resolver_template | model | StrOutputParser() | captureResponseMessageRunnable
 
+# Error Scenario
+rule_error_resolver_template = ChatPromptTemplate.from_messages(
+    [
+        ("system","You are an assistant which understands Business Rule Management System for an Auto Insurance Company "
+        "Looks like the user made an error while prompting for the required details. They could either miss rule number or policy number."
+        "Remmember both are required"
+        "Provide the response in Markdown Format. No need to includes source code or tables"),
+        ("human", "Politely Tell the user about their mistake & keep it a little short."),
+    ]
+)
+
+captureErrorResponseMessageRunnable = RunnableLambda(lambda x: print(f"Captured Error Response Message : {x}") or setErrorResponseMessage(x))
+rule_error_resolver_chain = rule_error_resolver_template | model | StrOutputParser() | captureErrorResponseMessageRunnable
+
 
 
 class UserInput(BaseModel):
@@ -108,9 +129,15 @@ class UserInput(BaseModel):
     
 @app.post("/rulehelp")
 def user_request(uInput:UserInput):
-    # We need to run the below 2 in parallel
+    # We need to run the below 2 in . The if else statement looks like a mess, could be fixed later.
     capture_ruleName_chain.invoke({"user_query":uInput.user_request})
+    if(ruleName == 'empty'):
+        rule_error_resolver_chain.invoke({})
+        return Response(content=errorResponseMessage, media_type="text/plain")
     capture_policyNumber_chain.invoke({"user_query":uInput.user_request})
+    if(policyNumber == 'empty'):
+        rule_error_resolver_chain.invoke({})
+        return Response(content=errorResponseMessage, media_type="text/plain")
     print(f"RuleName: {ruleName} , PolicyNumber: {policyNumber}")
     fetchRuleSource()
     fetchPolicyRequest()
@@ -121,3 +148,4 @@ def user_request(uInput:UserInput):
 
 if __name__ == "__main__":
     uvicorn.run("open-ai-langchain:app", port=5000, log_level="info")
+    
